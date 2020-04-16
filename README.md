@@ -39,7 +39,7 @@ pip install --no-dependencies git+https://github.com/widmi/widis-lstm-tools
 pip install --no-dependencies --upgrade git+https://github.com/ml-jku/DeepRC
 ```
 
-Train a binary DeepRC classifier on datasets "0" category "real-world data with implanted signals":
+Train a binary DeepRC classifier on dataset "0" of category "real-world data with implanted signals":
 
 ```bash
 python3 -m deeprc.examples.simple_cmv_with_implanted_signals 0 --n_updates 10000 --evaluate_at 2000
@@ -56,7 +56,7 @@ open `http://localhost:6060/` in your web-browser to view the performance.
 
 ##### Real-world data with implanted signals
 This is category has the smallest dataset files and is a good starting point.
-Training a binary DeepRC classifier on datasets "0" of category "real-world data with implanted signals":
+Training a binary DeepRC classifier on dataset "0" of category "real-world data with implanted signals":
 ```bash
 python3 -m deeprc.examples.simple_cmv_with_implanted_signals 0 --n_updates 10000 --evaluate_at 2000
 ```
@@ -67,13 +67,13 @@ python3 -m deeprc.examples.simple_cmv_with_implanted_signals -h
 ```
 
 ##### LSTM-generated data
-Training a binary DeepRC classifier on datasets "0" of category "LSTM-generated data":
+Training a binary DeepRC classifier on dataset "0" of category "LSTM-generated data":
 ```bash
 python3 -m deeprc.examples.simple_lstm_generated 0
 ```
 
 ##### Real-world data
-Training a binary DeepRC classifier on datasets of category "real-world data":
+Training a binary DeepRC classifier on dataset "real-world data":
 ```bash
 python3 -m deeprc.examples.simple_cmv
 ```
