@@ -17,9 +17,15 @@ Günter Klambauer<sup>2 1</sup>
 Paper: https://www.biorxiv.org/content/10.1101/2020.04.12.038158v2
 
 ## Quickstart
+### conda
+Conda setup:
+```bash
+conda env create -f deeprc_conda.yml --name deeprc_env
+conda activate deeprc_env
+```
 
-You can directly install the package from GitHub using the commands below:
-
+### pip
+Alternatively, can install via pip:
 ```bash
 pip install --no-dependencies git+https://github.com/widmi/widis-lstm-tools
 pip install git+https://github.com/ml-jku/DeepRC
