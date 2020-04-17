@@ -145,5 +145,6 @@ We are currently cleaning up and uploading the code for the paper.
    - [pandas](https://pandas.pydata.org/) (tested with version 0.24.2)
    - [tqdm](https://tqdm.github.io/) (tested with version 0.24.2)
    - [scikit-learn](https://scikit-learn.org/) (tested with version 0.22.2.post1)
+   - [requests](https://requests.readthedocs.io/en/master/) (tested with version 2.21.0)
    - [tensorboard](https://www.tensorflow.org/tensorboard) (tested with version "tb-nightly==1.15.0a20190806")
    - [widis-lstm-tools](https://github.com/widmi/widis-lstm-tools) (tested with version 0.4)
