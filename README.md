@@ -136,7 +136,7 @@ deeprc
 We are currently cleaning up and uploading the code for the paper.
 
 ## Requirements
-- [Python3.6](https://www.python.org/) or higher
+- [Python3.6.9](https://www.python.org/) or higher
 - Python packages:
    - [Pytorch](https://pytorch.org/) (tested with version 1.3.1)
    - [numpy](https://www.numpy.org/) (tested with version 1.18.2)
@@ -146,5 +146,5 @@ We are currently cleaning up and uploading the code for the paper.
    - [tqdm](https://tqdm.github.io/) (tested with version 0.24.2)
    - [scikit-learn](https://scikit-learn.org/) (tested with version 0.22.2.post1)
    - [requests](https://requests.readthedocs.io/en/master/) (tested with version 2.21.0)
-   - [tensorboard](https://www.tensorflow.org/tensorboard) (tested with version "tb-nightly==1.15.0a20190806")
+   - [tensorboard](https://www.tensorflow.org/tensorboard) (tested with version 1.14.0)
    - [widis-lstm-tools](https://github.com/widmi/widis-lstm-tools) (tested with version 0.4)
