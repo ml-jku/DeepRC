@@ -45,12 +45,6 @@ pip install --no-dependencies git+https://github.com/widmi/widis-lstm-tools
 pip install --no-dependencies --upgrade git+https://github.com/ml-jku/DeepRC
 ```
 
-Train a binary DeepRC classifier on dataset "0" of category "real-world data with implanted signals":
-
-```bash
-python3 -m deeprc.examples.simple_cmv_with_implanted_signals 0 --n_updates 10000 --evaluate_at 2000
-```
-
 ## Usage
 ### Training DeepRC on pre-defined datasets
 You can train a DeepRC model on the pre-defined datasets of the DeepRC paper 
@@ -77,6 +71,13 @@ Training a binary DeepRC classifier on dataset "0" of category "LSTM-generated d
 ```bash
 python3 -m deeprc.examples.simple_lstm_generated 0
 ```
+
+##### Simulated immunosequencing data
+Training a binary DeepRC classifier on dataset "0" of category "simulated immunosequencing data":
+```bash
+python3 -m deeprc.examples.simple_lstm_generated 0
+```
+Warning: Filesize to download is ~20GB per dataset!
 
 ##### Real-world data
 Training a binary DeepRC classifier on dataset "real-world data":
