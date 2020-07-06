@@ -24,14 +24,14 @@ class DatasetToHDF5(object):
         """Convert data from raw dataset to hdf5 container
         
         Converts dataset consisting of multiple `.tsv` or `.csv` files to optimized hdf5 container;
-        Repertoire files must be located in the same directory or subdirectories of `input_file` file;
+        Repertoire files must be located in the same directory or subdirectories of `metadata_file` file;
         See `datasets/README.md` for more information and examples on supported dataset structures;
 
         Parameters
         ----------
         metadata_file : str
             Input file containing the metadata for the dataset;
-            Repertoire files must be located in the same directory or subdirectories of `input_file` file;
+            Repertoire files must be located in the same directory or subdirectories of `metadata_file` file;
             Must by `.tsv` or `.csv` file containing:
             1 column holding the repertoire names (Default column name: `ID`) and
             1 column holding the the labels (Default column name: `status`);
