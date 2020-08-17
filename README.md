@@ -1,20 +1,23 @@
-# DeepRC: Immune repertoire classification with attention-based deep massive multiple instance learning
+# Modern Hopfield Networks and Attention for Immune Repertoire Classification
 
-Michael Widrich<sup>1 2</sup>, 
-Bernhard Schäfl<sup>1 2</sup>, 
-Milena Pavlović<sup>3 4</sup>, 
+Michael Widrich<sup>1</sup>,
+Bernhard Schäfl<sup>1</sup>, 
+Milena Pavlović<sup>3 4</sup>,
+Hubert Ramsauer<sup>1</sup>,
+Lukas Gruber<sup>1</sup>,
+Markus Holzleitner<sup>1</sup>,
+Johannes Brandstetter<sup>1</sup>,
 Geir Kjetil Sandve<sup>4</sup>, 
-Sepp Hochreiter<sup>2 1 5</sup>, 
 Victor Greiff<sup>3</sup>, 
-Günter Klambauer<sup>2 1</sup>
+Sepp Hochreiter<sup>1 2</sup>,
+Günter Klambauer<sup>1</sup>
 
-(1) Institute for Machine Learning, Johannes Kepler University Linz, Austria\
-(2) LIT AI Lab, Johannes Kepler University Linz, Austria\
+(1) ELLIS Unit Linz and LIT AI Lab, Institute for Machine Learning, Johannes Kepler University Linz, Austria\
+(2) Institute of Advanced Research in Artificial Intelligence (IARAI)\
 (3) Department of Immunology, University of Oslo, Oslo, Norway\
-(4) Department of Informatics, University of Oslo, Oslo, Norway\
-(5) Institute of Advanced Research in Artificial Intelligence (IARAI)
+(4) Department of Informatics, University of Oslo, Oslo, Norway
 
-Paper: https://www.biorxiv.org/content/10.1101/2020.04.12.038158v2
+Paper: https://arxiv.org/abs/2007.13505
 
 ## Quickstart
 ### conda
@@ -140,7 +143,7 @@ deeprc
 ```
 
 ## Note
-We are currently cleaning up and uploading the code for the paper.
+We are currently cleaning up and uploading the code for the paper. Baseline methods, contribution analysis, LSTM embedding, and other features will follow soon.
 
 ## Requirements
 - [Python3.6.9](https://www.python.org/) or higher
