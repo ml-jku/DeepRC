@@ -2,8 +2,8 @@
 
 Michael Widrich<sup>1</sup>,
 Bernhard Schäfl<sup>1</sup>, 
-Hubert Ramsauer<sup>1</sup>,
 Milena Pavlović<sup>3 4</sup>,
+Hubert Ramsauer<sup>1</sup>,
 Lukas Gruber<sup>1</sup>,
 Markus Holzleitner<sup>1</sup>,
 Johannes Brandstetter<sup>1</sup>,
