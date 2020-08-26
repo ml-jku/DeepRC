@@ -205,7 +205,7 @@ validation and testing subsets according to the following rules:
 
 # References (excerpt)
 
-- Ralaivola, L., Swamidass, S. J., Saigo, H., and Baldi, P.Graph kernels for chemical informatics.
+- Ralaivola, L., Swamidass, S. J., Saigo, H., and Baldi, P. Graph kernels for chemical informatics.
 Neural networks,18(8):1093–1110, 2005.
 
 - Levandowsky, M. and Winter, D.  Distance between sets. Nature, 234(5323):34–35, 1971
