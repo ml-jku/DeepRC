@@ -23,7 +23,7 @@ Paper: https://arxiv.org/abs/2007.13505
 ### conda
 Conda setup:
 ```bash
-conda env create -f deeprc_conda.yml --name deeprc_env
+conda env create -f condal_install.yml --name deeprdc_env
 conda activate deeprc_env
 ```
 
