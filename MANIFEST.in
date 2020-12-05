@@ -1,4 +1,2 @@
-include deeprc/datasets/splits_used_in_paper/CMV_splits.pkl
-include deeprc/datasets/splits_used_in_paper/CMV_with_implanted_signals.pkl
-include deeprc/datasets/splits_used_in_paper/LSTM_generated.pkl
-include deeprc/datasets/splits_used_in_paper/simulated_immunosequencing.pkl
+include deeprc/datasets/splits_used_in_paper/*
+include deeprc/datasets/example_dataset/*

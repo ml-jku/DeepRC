@@ -19,7 +19,18 @@ Günter Klambauer<sup>1</sup>
 
 Paper: https://arxiv.org/abs/2007.13505
 
-## Quickstart
+**This package provides:**
+- modular and customizable DeepRC implementation for massive multiple instance learning problems, such as immune repertoire classification,
+- CNN and LSTM sequence embedding,
+- single- or multi-task settings (simple building-block principle),
+- support for custom datasets,
+- examples that you can quickly adapt to your problem settings.
+
+**Will be added:**
+- multiple attention heads/queries and integration of https://github.com/ml-jku/hopfield-layers,
+- Integrated Gradients analysis (write me an [email](widrich at ml.jku.at) if you urgently need a preliminary version).
+
+## Installation
 ### conda
 Conda setup:
 ```bash
@@ -49,10 +60,12 @@ pip install --no-dependencies --upgrade git+https://github.com/ml-jku/DeepRC
 ```
 
 ## Usage
+Can't wait? Examples are here: ```deeprc/examples/```
+
 ### Training DeepRC on pre-defined datasets
 You can train a DeepRC model on the pre-defined datasets of the DeepRC paper 
-using one of the Python files in folder `deeprc/examples`.
-The datasets will be downloaded automatically.
+using one of the Python files in folder `deeprc/examples/examples_from_paper`.
+The datasets will be downloaded automatically (please only download them once and then reuse the downloaded versions).
 
 You can use `tensorboard --logdir [results_directory] --port=6060` and 
 open `http://localhost:6060/` in your web-browser to view the performance.
@@ -61,89 +74,83 @@ open `http://localhost:6060/` in your web-browser to view the performance.
 This is category has the smallest dataset files and is a good starting point.
 Training a binary DeepRC classifier on dataset "0" of category "real-world data with implanted signals":
 ```bash
-python3 -m deeprc.examples.simple_cmv_with_implanted_signals 0 --n_updates 10000 --evaluate_at 2000
+python3 -m deeprc.examples.examples_from_paper.cmv_with_implanted_signals 0 --n_updates 10000 --evaluate_at 2000
 ```
 
 To get more information, you can use the help function:
 ```bash
-python3 -m deeprc.examples.simple_cmv_with_implanted_signals -h
+python3 -m deeprc.examples.examples_from_paper.cmv_with_implanted_signals -h
 ```
 
 ##### LSTM-generated data
 Training a binary DeepRC classifier on dataset "0" of category "LSTM-generated data":
 ```bash
-python3 -m deeprc.examples.simple_lstm_generated 0
+python3 -m deeprc.examples.examples_from_paper.lstm_generated 0
 ```
 
 ##### Simulated immunosequencing data
 Training a binary DeepRC classifier on dataset "0" of category "simulated immunosequencing data":
 ```bash
-python3 -m deeprc.examples.simple_lstm_generated 0
+python3 -m deeprc.examples.examples_from_paper.simulated 0
 ```
 Warning: Filesize to download is ~20GB per dataset!
 
 ##### Real-world data
 Training a binary DeepRC classifier on dataset "real-world data":
 ```bash
-python3 -m deeprc.examples.simple_cmv
+python3 -m deeprc.examples.examples_from_paper.cmv
 ```
 
 ### Training DeepRC on a custom dataset
 You can train DeepRC on custom text-based datasets,
-which will be automatically converted to hdf5 containers.
-Specifications of the supported formats are give here: `deeprc/datasets/README.md`
-```python
-from deeprc.deeprc_binary.dataset_readers import make_dataloaders
-from deeprc.deeprc_binary.architectures import DeepRC
-from deeprc.deeprc_binary.training import train, evaluate
+such as the small example dataset `deeprc/datasets/example_dataset`.
+Specifications of the supported dataset formats are give here: `deeprc/datasets/README.md`.
 
-# Let's assume this is your dataset metadata file
-metadatafile = 'custom_dataset/metadata.tsv'
+You can change the dataset directory and task description in the examples listed below and start training a DeepRC model on your task:
 
-# Get data loaders from text-based dataset (see `deeprc/datasets/README.md` for format)
-trainingset, trainingset_eval, validationset_eval, testset_eval = make_dataloaders(
-    metadatafile, target_label='status', true_class_label_value='+', id_column='ID', 
-    single_class_label_columns=('status',), sequence_column='amino_acid',
-    sequence_counts_column='templates', column_sep='\t', filename_extension='.tsv')
-
-# Train a DeepRC model
-model = DeepRC(n_input_features=23, n_output_features=1, max_seq_len=30)
-train(model, trainingset_dataloader=trainingset, trainingset_eval_dataloader=trainingset_eval,
-      validationset_eval_dataloader=validationset_eval, results_directory='results')
-
-# Evaluate on test set
-roc_auc, bacc, f1, scoring_loss = evaluate(model=model, dataloader=testset_eval)
-
-print(f"Test scores:\nroc_auc: {roc_auc:6.4f}; bacc: {bacc:6.4f}; f1:{f1:6.4f}; scoring_loss: {scoring_loss:6.4f}")
+##### Training a binary DeepRC classifier on a small random example dataset using 1D CNN sequence embedding:
+```bash
+python3 -m deeprc.examples.example_single_task_cnn.py
 ```
 
-Note that `make_dataloaders()` will automatically create a hdf5 container of your dataset.
-Later, you can simply load this hdf5 container instead of the text-based dataset:
-```python
-from deeprc.deeprc_binary.dataset_readers import make_dataloaders
-# Get data loaders from hdf5 container
-trainingset, trainingset_eval, validationset_eval, testset_eval = make_dataloaders('dataset.hdf5')
+##### Training DeepRC in a multi-task setting on a small random example dataset using 1D CNN sequence embedding:
+```bash
+python3 -m deeprc.examples.example_multitask_cnn.py
 ```
 
-You can use `tensorboard --logdir [results_directory] --port=6060` and 
-open 'http://localhost:6060/' in your web-browser to view the performance.
+##### Training DeepRC in a multi-task setting on a small random example dataset using LSTM sequence embedding:
+```bash
+python3 -m deeprc.examples.example_multitask_lstm.py
+```
+
 
 ## Structure
 ```text
-deeprc
-      |--datasets : stores datasets
+deeprc/
+      |--datasets/ : stores datasets
+      |   |--example_dataset/ : Small example dataset
       |   |--README.md : Information on supported dataset formats
-      |--deeprc_binary : DeepRC implementation for binary classification
+      |   |--splits_used_in_paper/ : Dataset splits as used in paper
+      |--deeprc/ : DeepRC implementation
       |   |--architectures.py : DeepRC network architecture
       |   |--dataset_converters.py : Converter for text-based datasets
       |   |--dataset_readers.py : Tools for reading datasets
       |   |--predefined_datasets.py : Pre-defined datasets from paper
+      |   |--task_definitions.py : Tools for defining the task to train DeepRC on
       |   |--training.py : Tools for training DeepRC model
-      |--examples : DeepRC examples
+      |--examples/ : DeepRC examples
+      |   |--examples_from_paper/ : Examples on datasets used in paper
 ```
 
 ## Note
-We are currently cleaning up and uploading the code for the paper. Baseline methods, contribution analysis, LSTM embedding, and other features will follow soon.
+We are currently cleaning up and uploading the code for the paper.
+There might be (and probably are) some bugs which will be fixed soon.
+If you need help with running DeepRC in the meantime,
+feel free to write me an [email](widrich at ml.jku.at).
+
+Best wishes,
+
+Michael
 
 ## Requirements
 - [Python3.6.9](https://www.python.org/) or higher
