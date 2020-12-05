@@ -1,2 +1,2 @@
-include deeprc/datasets/splits_used_in_paper/*
-include deeprc/datasets/example_dataset/*
+exclude deeprc/datasets/splits_used_in_paper/*
+exclude deeprc/examples/*

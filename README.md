@@ -28,18 +28,11 @@ Paper: https://arxiv.org/abs/2007.13505
 
 **Will be added:**
 - multiple attention heads/queries and integration of https://github.com/ml-jku/hopfield-layers,
-- Integrated Gradients analysis (write me an email (widrich(at)ml.jku.at) if you urgently need a preliminary version).
+- Integrated Gradients analysis (write me an [email](widrich at ml.jku.at) if you urgently need a preliminary version).
 
 ## Installation
-### conda
-Conda setup:
-```bash
-conda env create -f condal_install.yml --name deeprdc_env
-conda activate deeprc_env
-```
-
 ### pip
-Alternatively, can install via pip:
+You can install this package via pip:
 ```bash
 pip install --no-dependencies git+https://github.com/widmi/widis-lstm-tools
 pip install git+https://github.com/ml-jku/DeepRC
@@ -60,7 +53,11 @@ pip install --no-dependencies --upgrade git+https://github.com/ml-jku/DeepRC
 ```
 
 ## Usage
-Can't wait? Examples are here: ```deeprc/examples/```
+To run the examples,
+download the github repo as .zip file, extract the .zip file,
+and navigate into the extracted directory (you should see a `deeprc` folder and the `README.md` there).
+
+Can't wait? Examples are here: ```deeprc/examples/```.
 
 ### Training DeepRC on pre-defined datasets
 You can train a DeepRC model on the pre-defined datasets of the DeepRC paper 
@@ -126,27 +123,27 @@ python3 -m deeprc.examples.example_multitask_lstm.py
 
 ## Structure
 ```text
-deeprc/
-      |--datasets/ : stores datasets
-      |   |--example_dataset/ : Small example dataset
+deeprc
+      |--datasets : stores datasets
+      |   |--example_dataset : Small example dataset
       |   |--README.md : Information on supported dataset formats
-      |   |--splits_used_in_paper/ : Dataset splits as used in paper
-      |--deeprc/ : DeepRC implementation
+      |   |--splits_used_in_paper : Dataset splits as used in paper
+      |--deeprc : DeepRC implementation
       |   |--architectures.py : DeepRC network architecture
       |   |--dataset_converters.py : Converter for text-based datasets
       |   |--dataset_readers.py : Tools for reading datasets
       |   |--predefined_datasets.py : Pre-defined datasets from paper
       |   |--task_definitions.py : Tools for defining the task to train DeepRC on
       |   |--training.py : Tools for training DeepRC model
-      |--examples/ : DeepRC examples
-      |   |--examples_from_paper/ : Examples on datasets used in paper
+      |--examples : DeepRC examples
+      |   |--examples_from_paper : Examples on datasets used in paper
 ```
 
 ## Note
 We are currently cleaning up and uploading the code for the paper.
 There might be (and probably are) some bugs which will be fixed soon.
 If you need help with running DeepRC in the meantime,
-feel free to write me an email (widrich(at)ml.jku.at).
+feel free to write me an [email](widrich at ml.jku.at).
 
 Best wishes,
 
@@ -163,5 +160,5 @@ Michael
    - [tqdm](https://tqdm.github.io/) (tested with version 0.24.2)
    - [scikit-learn](https://scikit-learn.org/) (tested with version 0.22.2.post1)
    - [requests](https://requests.readthedocs.io/en/master/) (tested with version 2.21.0)
-   - [tensorboard](https://www.tensorflow.org/tensorboard) (tested with version 1.14.0)
+   - [tensorboard](https://www.tensorflow.org/tensorboard) (tested with version 1.15.0)
    - [widis-lstm-tools](https://github.com/widmi/widis-lstm-tools) (tested with version 0.4)
