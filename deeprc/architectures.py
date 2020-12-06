@@ -31,7 +31,7 @@ def compute_position_features(max_seq_len, sequence_lengths, dtype=np.float16):
 
 class SequenceEmbeddingCNN(nn.Module):
     def __init__(self, n_input_features: int, kernel_size: int = 9, n_kernels: int = 32, n_layers: int = 1):
-        """Sequence embedding using 1D-CNN (`h_1` in paper)
+        """Sequence embedding using 1D-CNN (`h()` in paper)
         
         See `deeprc/examples/` for examples.
         
@@ -88,7 +88,7 @@ class SequenceEmbeddingCNN(nn.Module):
 
 class SequenceEmbeddingLSTM(nn.Module):
     def __init__(self, n_input_features: int, n_lstm_blocks: int = 32, n_layers: int = 1, lstm_kwargs: dict = None):
-        """Sequence embedding using LSTM network (`h_1` in paper) with `torch.nn.LSTM`
+        """Sequence embedding using LSTM network (`h()` in paper) with `torch.nn.LSTM`
         
         See `deeprc/examples/` for examples.
         
@@ -142,7 +142,7 @@ class SequenceEmbeddingLSTM(nn.Module):
 
 class AttentionNetwork(nn.Module):
     def __init__(self, n_input_features: int, n_layers: int = 2, n_units: int = 32):
-        """Attention network (`h_2` in paper) as fully connected network.
+        """Attention network (`f()` in paper) as fully connected network.
          Currently only implemented for 1 attention head and query.
         
         See `deeprc/examples/` for examples.
@@ -192,7 +192,7 @@ class AttentionNetwork(nn.Module):
 
 class OutputNetwork(nn.Module):
     def __init__(self, n_input_features: int, n_output_features: int = 1, n_layers: int = 1, n_units: int = 32):
-        """Output network (`o` in paper) as fully connected network
+        """Output network (`o()` in paper) as fully connected network
         
         See `deeprc/examples/` for examples.
         
@@ -272,11 +272,11 @@ class DeepRC(nn.Module):
             Number of input features per sequence position (without position features).
             E.g. 20 for 20 different AA characters.
         sequence_embedding_network
-            Sequence embedding network (`h_1` in paper).
+            Sequence embedding network (`h()` in paper).
         attention_network
-            Attention network (`h_2` in paper).
+            Attention network (`f()` in paper).
         output_network
-            Output network (`o` in paper).
+            Output network (`o()` in paper).
         sequence_embedding_as_16_bit : bool
             Compute attention weights using 16bit precision? (Recommended if supported by hardware.)
         consider_seq_counts : bool
@@ -302,7 +302,7 @@ class DeepRC(nn.Module):
         self.sequence_reduction_fraction = sequence_reduction_fraction
         self.reduction_mb_size = int(reduction_mb_size)
         
-        # sequence embedding network (h_1)
+        # sequence embedding network (h())
         if sequence_embedding_as_16_bit:
             self.embedding_dtype = torch.float16
             self.sequence_embedding = sequence_embedding_network.to(device=device, dtype=self.embedding_dtype)
@@ -310,7 +310,7 @@ class DeepRC(nn.Module):
             self.embedding_dtype = torch.float
             self.sequence_embedding = sequence_embedding_network
         
-        # Attention network (h_2)
+        # Attention network (f())
         self.attention_nn = attention_network
         
         # Output network (o)
@@ -400,18 +400,18 @@ class DeepRC(nn.Module):
         predictions: torch.Tensor
             Prediction for bags of shape (n_samples, n_outputs)
         """
-        # Get sequence embedding h_1 for all bags in mb (shape: (d_k, d_v))
+        # Get sequence embedding h() for all bags in mb (shape: (d_k, d_v))
         mb_emb_seqs = self.sequence_embedding(inputs_flat,
                                               sequence_lengths=sequence_lengths_flat).to(dtype=torch.float32)
         
-        # Calculate attention weights h_2 before softmax function for all bags in mb (shape: (d_k, 1))
+        # Calculate attention weights f() before softmax function for all bags in mb (shape: (d_k, 1))
         mb_attention_weights = self.attention_nn(mb_emb_seqs)
         
         # Compute representation per bag (N times shape (d_v,))
         mb_emb_seqs_after_attention = []
         start_i = 0
         for n_seqs in n_sequences_per_bag:
-            # Get sequence embedding h_1 for single bag (shape: (n_sequences_per_bag, d_v))
+            # Get sequence embedding h() for single bag (shape: (n_sequences_per_bag, d_v))
             attention_weights = mb_attention_weights[start_i:start_i+n_seqs]
             # Get attention weights for single bag (shape: (n_sequences_per_bag, 1))
             emb_seqs = mb_emb_seqs[start_i:start_i+n_seqs]
@@ -505,10 +505,10 @@ class DeepRC(nn.Module):
                 sequence_lengths_mb = sequence_lengths[mb_i*self.reduction_mb_size:(mb_i+1)*self.reduction_mb_size].to(
                         device=self.device, dtype=torch.long)
                 
-                # Get sequence embedding (h_1)
+                # Get sequence embedding (h())
                 emb_seqs = self.sequence_embedding(inputs_mb, sequence_lengths=sequence_lengths_mb).to(dtype=torch.float32)
                 
-                # Calculate attention weights before softmax (h_2)
+                # Calculate attention weights before softmax (f())
                 attention_acts.append(self.attention_nn(emb_seqs).squeeze(dim=-1))
             
             # Concatenate attention weights for all sequences
