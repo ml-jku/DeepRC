@@ -17,7 +17,8 @@ Günter Klambauer<sup>1</sup>
 (3) Department of Immunology, University of Oslo, Oslo, Norway\
 (4) Department of Informatics, University of Oslo, Oslo, Norway
 
-Paper: https://arxiv.org/abs/2007.13505
+- Paper: https://arxiv.org/abs/2007.13505
+- Poster: [neurips_poster.pdf](neurips_poster.pdf)
 
 **This package provides:**
 - modular and customizable DeepRC implementation for massive multiple instance learning problems, such as immune repertoire classification,
@@ -120,6 +121,10 @@ python3 -m deeprc.examples.example_multitask_cnn.py
 python3 -m deeprc.examples.example_multitask_lstm.py
 ```
 
+## Datasets
+The datasets will be automatically downloaded when running the examples from section "Training DeepRC on pre-defined datasets".
+You can also manually download the datasets here: https://ml.jku.at/research/DeepRC/datasets/.
+Please see our paper for descriptions of the datasets.
 
 ## Structure
 ```text
@@ -137,6 +142,7 @@ deeprc
       |   |--training.py : Tools for training DeepRC model
       |--examples : DeepRC examples
       |   |--examples_from_paper : Examples on datasets used in paper
+      |--neurips_poster.pdf : Poster from NeurIPS2020 poster session
 ```
 
 ## Note

@@ -79,10 +79,8 @@ def simulated_dataset(dataset_path: str = None, dataset_id: int = 0, task_defini
     # Download metadata file
     if not os.path.exists(metadata_file):
         user_confirmation(f"File {metadata_file} not found. It will be downloaded now. Continue?", 'y', 'n')
-        url_get(f"https://cloud.ml.jku.at/s/KQDAdHjHpdn3pzg/download?path=/datasets/simulated_immunosequencing_data/metadata&files=simulated_{dataset_id:03d}.tsv",
+        url_get(f"https://ml.jku.at/research/DeepRC/datasets/simulated_immunosequencing_data/metadata/implanted_signals_{dataset_id:03d}.tsv",
                 metadata_file)
-        # url_get(f"https://ml.jku.at/research/DeepRC/datasets/simulated_immunosequencing_data/metadata/simulated_{dataset_id:03d}.tsv",
-        #         metadata_file)
     
     # Download repertoire file
     if not os.path.exists(repertoiresdata_file):
@@ -177,10 +175,8 @@ def lstm_generated_dataset(dataset_path: str = None, dataset_id: int = 0, task_d
     # Download metadata file
     if not os.path.exists(metadata_file):
         user_confirmation(f"File {metadata_file} not found. It will be downloaded now. Continue?", 'y', 'n')
-        url_get(f"https://cloud.ml.jku.at/s/KQDAdHjHpdn3pzg/download?path=/datasets/LSTM_generated_data/metadata&files=lstm_{dataset_id}.tsv",
+        url_get(f"https://ml.jku.at/research/DeepRC/datasets/LSTM_generated_data/metadata/lstm_{dataset_id}.tsv",
                 metadata_file)
-        # url_get(f"https://ml.jku.at/research/DeepRC/datasets/LSTM_generated_data/metadata/lstm_{dataset_id}.tsv",
-        #         metadata_file)
     
     # Download repertoire file
     if not os.path.exists(repertoiresdata_file):
@@ -274,10 +270,8 @@ def cmv_implanted_dataset(dataset_path: str = None, dataset_id: int = 0, task_de
     # Download metadata file
     if not os.path.exists(metadata_file):
         user_confirmation(f"File {metadata_file} not found. It will be downloaded now. Continue?", 'y', 'n')
-        url_get(f"https://cloud.ml.jku.at/s/KQDAdHjHpdn3pzg/download?path=/datasets/CMV_data_with_implanted_signals/metadata&files=implanted_signals_{dataset_id}.tsv",
+        url_get(f"https://ml.jku.at/research/DeepRC/datasets/CMV_data_with_implanted_signals/metadata/implanted_signals_{dataset_id}.tsv",
                 metadata_file)
-        # url_get(f"https://ml.jku.at/research/DeepRC/datasets/CMV_data_with_implanted_signals/metadata/implanted_signals_{dataset_id}.tsv",
-        #         metadata_file)
     
     # Download repertoire file
     if not os.path.exists(repertoiresdata_file):
@@ -375,10 +369,8 @@ def cmv_dataset(dataset_path: str = None, task_definition: TaskDefinition = None
     # Download metadata file
     if not os.path.exists(metadata_file):
         user_confirmation(f"File {metadata_file} not found. It will be downloaded now. Continue?", 'y', 'n')
-        url_get(f"https://cloud.ml.jku.at/s/KQDAdHjHpdn3pzg/download?path=/datasets/CMV_data/metadata&files=cmv_emerson_2017.tsv",
+        url_get(f"https://ml.jku.at/research/DeepRC/datasets/CMV_data/metadata/cmv_emerson_2017.tsv",
                 metadata_file)
-        # url_get(f"https://ml.jku.at/research/DeepRC/datasets/CMV_data/metadata/cmv_emerson_2017.tsv",
-        #         metadata_file)
     
     # Download repertoire file
     if not os.path.exists(repertoiresdata_file):
