@@ -18,7 +18,7 @@ def user_confirmation(text: str = "Continue?", continue_if: str = 'y', abort_if:
         if user_input == continue_if:
             break
         elif user_input == abort_if:
-            exit("Session terminated by user.")
+            exit()
 
 
 def url_get(url: str, dst: str, verbose: bool = True):

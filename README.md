@@ -29,7 +29,7 @@ Günter Klambauer<sup>1</sup>
 
 **Will be added:**
 - multiple attention heads/queries and integration of https://github.com/ml-jku/hopfield-layers,
-- Integrated Gradients analysis (write me an [email](widrich at ml.jku.at) if you urgently need a preliminary version).
+- Integrated Gradients analysis (write me an email (widrich at ml.jku.at) if you urgently need a preliminary version).
 
 ## Installation
 ### pip
@@ -69,7 +69,7 @@ You can use `tensorboard --logdir [results_directory] --port=6060` and
 open `http://localhost:6060/` in your web-browser to view the performance.
 
 ##### Real-world data with implanted signals
-This is category has the smallest dataset files and is a good starting point.
+This is category has the smallest dataset files and is a **good starting point**.
 Training a binary DeepRC classifier on dataset "0" of category "real-world data with implanted signals":
 ```bash
 python3 -m deeprc.examples.examples_from_paper.cmv_with_implanted_signals 0 --n_updates 10000 --evaluate_at 2000
@@ -149,7 +149,7 @@ deeprc
 We are currently cleaning up and uploading the code for the paper.
 There might be (and probably are) some bugs which will be fixed soon.
 If you need help with running DeepRC in the meantime,
-feel free to write me an [email](widrich at ml.jku.at).
+feel free to write me an email (widrich at ml.jku.at).
 
 Best wishes,
 

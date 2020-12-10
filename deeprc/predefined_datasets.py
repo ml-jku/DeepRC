@@ -270,7 +270,9 @@ def cmv_implanted_dataset(dataset_path: str = None, dataset_id: int = 0, task_de
     # Download metadata file
     if not os.path.exists(metadata_file):
         user_confirmation(f"File {metadata_file} not found. It will be downloaded now. Continue?", 'y', 'n')
-        url_get(f"https://ml.jku.at/research/DeepRC/datasets/CMV_data_with_implanted_signals/metadata/implanted_signals_{dataset_id}.tsv",
+        # url_get(f"https://ml.jku.at/research/DeepRC/datasets/CMV_data_with_implanted_signals/metadata/implanted_signals_{dataset_id}.csv",
+        #         metadata_file)
+        url_get(f"https://cloud.ml.jku.at/s/KQDAdHjHpdn3pzg/download?path=/datasets/CMV_data_with_implanted_signals/metadata&files=implanted_signals_{dataset_id}.tsv",
                 metadata_file)
     
     # Download repertoire file
@@ -296,7 +298,7 @@ def cmv_implanted_dataset(dataset_path: str = None, dataset_id: int = 0, task_de
                          cross_validation_fold=cross_validation_fold, n_worker_processes=n_worker_processes,
                          batch_size=batch_size, inputformat=inputformat, keep_dataset_in_ram=keep_dataset_in_ram,
                          sample_n_sequences=sample_n_sequences, sequence_counts_scaling_fn=no_sequence_count_scaling,
-                         metadata_file_column_sep=',', verbose=verbose)
+                         verbose=verbose)
     return (task_definition, trainingset_dataloader, trainingset_eval_dataloader, validationset_eval_dataloader,
             testset_eval_dataloader)
 
