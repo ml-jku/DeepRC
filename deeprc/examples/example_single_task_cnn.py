@@ -88,19 +88,20 @@ trainingset, trainingset_eval, validationset_eval, testset_eval = make_dataloade
 # Create DeepRC Network
 #
 # Create sequence embedding network (for CNN, kernel_size and n_kernels are important hyper-parameters)
-sequence_embedding_network = SequenceEmbeddingCNN(n_input_features=20+3, kernel_size=9, n_kernels=32, n_layers=1)
+sequence_embedding_network = SequenceEmbeddingCNN(n_input_features=20+3, kernel_size=args.kernel_size,
+                                                  n_kernels=args.n_kernels, n_layers=1)
 # Create attention network
-attention_network = AttentionNetwork(n_input_features=32, n_layers=2, n_units=32)
+attention_network = AttentionNetwork(n_input_features=args.n_kernels, n_layers=2, n_units=32)
 # Create output network
-output_network = OutputNetwork(n_input_features=32, n_output_features=task_definition.get_n_output_features(),
-                               n_layers=1, n_units=32)
+output_network = OutputNetwork(n_input_features=args.n_kernels,
+                               n_output_features=task_definition.get_n_output_features(), n_layers=1, n_units=32)
 # Combine networks to DeepRC network
 model = DeepRC(max_seq_len=30, sequence_embedding_network=sequence_embedding_network,
                attention_network=attention_network,
                output_network=output_network,
                consider_seq_counts=False, n_input_features=20, add_positional_information=True,
                sequence_reduction_fraction=0.1, reduction_mb_size=int(5e4),
-               device=device)
+               device=device).to(device=device)
 
 
 #
@@ -110,7 +111,7 @@ train(model, task_definition=task_definition, trainingset_dataloader=trainingset
       trainingset_eval_dataloader=trainingset_eval, learning_rate=args.learning_rate,
       early_stopping_target_id='binary_target_1',  # Get model that performs best for this task
       validationset_eval_dataloader=validationset_eval, n_updates=args.n_updates, evaluate_at=args.evaluate_at,
-      results_directory="results/singletask_cnn"  # Here our results and trained models will be stored
+      device=device, results_directory="results/singletask_cnn"  # Here our results and trained models will be stored
       )
 # You can use "tensorboard --logdir [results_directory] --port=6060" and open "http://localhost:6060/" in your
 # web-browser to view the progress
@@ -119,5 +120,5 @@ train(model, task_definition=task_definition, trainingset_dataloader=trainingset
 #
 # Evaluate trained model on testset
 #
-scores = evaluate(model=model, dataloader=testset_eval, task_definition=task_definition)
+scores = evaluate(model=model, dataloader=testset_eval, task_definition=task_definition, device=device)
 print(f"Test scores:\n{scores}")
