@@ -193,12 +193,15 @@ class DatasetToHDF5(object):
             for i, sequence_str in enumerate(sequences_str):
                 amino_acid_sequences[i, :seq_lens[i]] = [self.aa_ind_dict[aa] for aa in sequence_str]
         except Exception as e:
-            print(f"Failure in file {filename}")
+            print(f"\n\n\nFailure in file {filename}\n\n\n")
             raise e
         return amino_acid_sequences
     
-    def save_data_to_file(self, output_file: str, n_workers: int = 50):
+    def save_data_to_file(self, output_file: str, n_workers: int = 50, large_repertoires: bool = False):
         """ Read repertoire files and convert dataset to hdf5 container
+         
+         Set `large_repertoires` to True for large repertoire files if you experience memory problems during
+         multiprocessing.
         
         Parameters
         ----------
@@ -207,6 +210,9 @@ class DatasetToHDF5(object):
             Warning: If this file already exists, it will be overwritten!
         n_workers : int
             Number of parallel worker processes
+        large_repertoires : bool
+            Very large repertoire files might cause memory errors during multiprocessing. Set `large_repertoires` to
+            True if you experience such error messages (e.g. "... < number < ..." errors).
         """
         self._vprint(f"Saving dataset to {output_file}...")
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
@@ -239,10 +245,13 @@ class DatasetToHDF5(object):
                                            dtype=np.int8, fill_value=-1)
             
             with multiprocessing.Pool(processes=n_workers) as pool:
-                for sample_i, amino_acid_sequence_sample in tqdm.tqdm(enumerate(pool.imap(self._read_aa_sequence,
-                                                                                          self.repertoire_files)),
-                                                                      desc='Reading repertoire sequences',
-                                                                      total=len(self.repertoire_files)):
+                if large_repertoires:
+                    mapping_function = map
+                else:
+                    mapping_function = pool.imap
+                for sample_i, amino_acid_sequence_sample in tqdm.tqdm(enumerate(mapping_function(
+                        self._read_aa_sequence, self.repertoire_files)),
+                        desc='Reading repertoire sequences', total=len(self.repertoire_files)):
                     sample_seqs = slice(sample_sequences_start_end[sample_i, 0],
                                         sample_sequences_start_end[sample_i, 1])
                     amino_acid_sequences[sample_seqs, :amino_acid_sequence_sample.shape[1]] = amino_acid_sequence_sample
