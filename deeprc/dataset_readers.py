@@ -296,6 +296,7 @@ class RepertoireDataset(Dataset):
             Number of sequences per repertoire might be smaller than `sample_n_sequences` if repertoire is smaller or
             random indices have been drawn multiple times.
             If None, all sequences will be loaded for each repertoire.
+            Can be set for individual samples using `sample_n_sequences` parameter of __getitem__() method.
         verbose : bool
             Activate verbose mode
         """
@@ -378,18 +379,18 @@ class RepertoireDataset(Dataset):
         self._vprint("  " + "  \n".join(self.stats.split('; ')))
         self._vprint(f"Used samples: {self.n_samples}")
     
-    def get_sample(self, idx: int, sample_n_sequences: int = None):
+    def get_sample(self, idx: int, sample_n_sequences: Union[None, int] = None):
         """ Return repertoire with index idx from dataset, randomly sub-/up-sampled to `sample_n_sequences` sequences
         
         Parameters
         ----------
         idx: int
             Index of repertoire to return
-        sample_n_sequences : int
+        sample_n_sequences : int or None
             Optional: Random sub-sampling of `sample_n_sequences` sequences per repertoire.
             Number of sequences per repertoire might be smaller than `sample_n_sequences` if repertoire is smaller or
             random indices have been drawn multiple times.
-            If None, all sequences will be loaded for each repertoire.
+            If None, will use `sample_n_sequences` as specified when creating `RepertoireDataset` instance.
         
         Returns
         ---------
@@ -447,10 +448,39 @@ class RepertoireDataset(Dataset):
     def __len__(self):
         return self.n_samples
     
-    def __getitem__(self, idx):
+    def __getitem__(self, idx, sample_n_sequences: Union[None, int] = None):
+        """ Return repertoire with index idx from dataset, randomly sub-/up-sampled to `sample_n_sequences` sequences
+        
+        Parameters
+        ----------
+        idx: int
+            Index of repertoire to return
+        sample_n_sequences : int or None
+            Optional: Random sub-sampling of `sample_n_sequences` sequences per repertoire.
+            Number of sequences per repertoire might be smaller than `sample_n_sequences` if repertoire is smaller or
+            random indices have been drawn multiple times.
+            If None, will use `sample_n_sequences` as specified when creating `RepertoireDataset` instance.
+        
+        Returns
+        ---------
+        target_features: numpy float32 array
+            Target feature vector.
+        sequences: numpy int8 array
+            Repertoire sequences in shape 'NCL' or 'LNC' depending on initialization of class.
+            AAs are represented by their index in self.aas.
+            Sequences are padded to equal length with value `-1`.
+        seq_lens: numpy integer array
+            True lengths of sequences in aa_sequences
+        counts_per_sequence: numpy integer array
+            Counts per sequence in repertoire.
+        sample_id: str
+            Sample ID.
+        """
         target_features = self.target_features[idx]
         sample_id = str(self.sample_keys[idx])
-        sequences, seq_lens, counts_per_sequence = self.get_sample(idx, self.sample_n_sequences)
+        if sample_n_sequences is None:
+            sample_n_sequences = self.sample_n_sequences
+        sequences, seq_lens, counts_per_sequence = self.get_sample(idx, sample_n_sequences)
         return target_features, sequences, seq_lens, counts_per_sequence, sample_id
     
     def _vprint(self, *args, **kwargs):
@@ -468,28 +498,54 @@ class RepertoireDatasetSubset(Dataset):
             A `deeprc.dataset_readers.RepertoireDataset` dataset instance
         indices
             List of indices that the subset of `dataset` should contain
-        sample_n_sequences : int
+        sample_n_sequences : int or None
             Optional: Random sub-sampling of `sample_n_sequences` sequences per repertoire.
             Number of sequences per repertoire might be smaller than `sample_n_sequences` if repertoire is smaller or
             random indices have been drawn multiple times.
-            If None, all sequences will be loaded for each repertoire.
+            If None, all sequences will be loaded as specified in `dataset`.
+            Can be set for individual samples using `sample_n_sequences` parameter of __getitem__() method.
         """
-        self.indices = indices
+        self.indices = np.asarray(indices, dtype=np.int)
         self.sample_n_sequences = sample_n_sequences
         self.repertoire_reader = dataset
         
-        self.get_sample = self.repertoire_reader.get_sample
         self.inds_to_aa = self.repertoire_reader.inds_to_aa
+        self.aas = self.repertoire_reader.aas
         self.inds_to_aa_ignore_negative = self.repertoire_reader.inds_to_aa_ignore_negative
-        self.target_features = self.repertoire_reader.target_features
-        self.sample_keys = self.repertoire_reader.sample_keys
     
     def __len__(self):
         return len(self.indices)
     
-    def __getitem__(self, idx):
-        idx = self.indices[idx]
-        target_features = self.target_features[idx]
-        sample_id = str(self.sample_keys[idx])
-        sequences, seq_lens, counts_per_sequence = self.get_sample(idx, self.sample_n_sequences)
+    def __getitem__(self, idx, sample_n_sequences: Union[None, int] = None):
+        """ Return repertoire with index idx from dataset, randomly sub-/up-sampled to `sample_n_sequences` sequences
+        
+        Parameters
+        ----------
+        idx: int
+            Index of repertoire to return
+        sample_n_sequences : int or None
+            Optional: Random sub-sampling of `sample_n_sequences` sequences per repertoire.
+            Number of sequences per repertoire might be smaller than `sample_n_sequences` if repertoire is smaller or
+            random indices have been drawn multiple times.
+            If None, will use `sample_n_sequences` as specified when creating `RepertoireDatasetSubset` instance.
+        
+        Returns
+        ---------
+        target_features: numpy float32 array
+            Target feature vector.
+        sequences: numpy int8 array
+            Repertoire sequences in shape 'NCL' or 'LNC' depending on initialization of class.
+            AAs are represented by their index in self.aas.
+            Sequences are padded to equal length with value `-1`.
+        seq_lens: numpy integer array
+            True lengths of sequences in aa_sequences
+        counts_per_sequence: numpy integer array
+            Counts per sequence in repertoire.
+        sample_id: str
+            Sample ID.
+        """
+        if sample_n_sequences is None:
+            sample_n_sequences = self.sample_n_sequences
+        target_features, sequences, seq_lens, counts_per_sequence, sample_id = \
+            self.repertoire_reader.__getitem__(self.indices[idx], sample_n_sequences=sample_n_sequences)
         return target_features, sequences, seq_lens, counts_per_sequence, sample_id
