@@ -59,7 +59,7 @@ model = DeepRC(max_seq_len=30, sequence_embedding_network=sequence_embedding_net
                output_network=output_network,
                consider_seq_counts=False, n_input_features=20, add_positional_information=True,
                sequence_reduction_fraction=0.1, reduction_mb_size=int(5e4),
-               device=device)
+               device=device).to(device=device)
 
 #
 # Train DeepRC model
@@ -68,7 +68,7 @@ train(model, task_definition=task_definition, trainingset_dataloader=trainingset
       trainingset_eval_dataloader=trainingset_eval,
       early_stopping_target_id='label',  # Get model that performs best for this task
       validationset_eval_dataloader=validationset_eval, n_updates=args.n_updates, evaluate_at=args.evaluate_at,
-      results_directory=f"results/simulated_{args.id}"  # Here our results and trained models will be stored
+      device=device, results_directory=f"results/simulated_{args.id}"  # Here our results and trained models will be stored
       )
 # You can use "tensorboard --logdir [results_directory] --port=6060" and open "http://localhost:6060/" in your
 # web-browser to view the progress
@@ -76,5 +76,5 @@ train(model, task_definition=task_definition, trainingset_dataloader=trainingset
 #
 # Evaluate trained model on testset
 #
-scores = evaluate(model=model, dataloader=testset_eval, task_definition=task_definition)
+scores = evaluate(model=model, dataloader=testset_eval, task_definition=task_definition, device=device)
 print(f"Test scores:\n{scores}")
