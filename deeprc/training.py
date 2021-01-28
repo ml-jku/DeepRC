@@ -231,7 +231,7 @@ def train(model: torch.nn.Module, task_definition: TaskDefinition, early_stoppin
                     if update % evaluate_at == 0 or update == n_updates or update == 1:
                         print("  Calculating training score...")
                         scores = evaluate(model=model, dataloader=trainingset_eval_dataloader,
-                                          task_definition=task_definition)
+                                          task_definition=task_definition, device=device)
                         print(f" ...done!")
                         tprint(f"[training_inference] u: {update:07d}; scores: {scores};")
                         
@@ -243,7 +243,7 @@ def train(model: torch.nn.Module, task_definition: TaskDefinition, early_stoppin
                         
                         print("  Calculating validation score...")
                         scores = evaluate(model=model, dataloader=validationset_eval_dataloader,
-                                          task_definition=task_definition)
+                                          task_definition=task_definition, device=device)
                         scoring_loss = scores[early_stopping_target_id]['loss']
                         
                         print(f" ...done!")
@@ -272,9 +272,9 @@ def train(model: torch.nn.Module, task_definition: TaskDefinition, early_stoppin
             update_progess_bar.close()
         finally:
             # In any case, save the current model and best model to a file
-            saver_loader.save_to_file(filename=f'lastsave_failed_u{update}.tar.gzip')
+            saver_loader.save_to_file(filename=f'lastsave_u{update}.tar.gzip')
             state.update(saver_loader.load_from_ram())  # load best model so far
-            saver_loader.save_to_file(filename=f'best_failed_u{update}.tar.gzip')
+            saver_loader.save_to_file(filename=f'best_u{update}.tar.gzip')
             print('Finished Training!')
     except Exception as e:
         with open(logfile, 'a') as lf:
