@@ -62,6 +62,7 @@ class SequenceEmbeddingCNN(nn.Module):
             conv.weight.data.normal_(0.0, np.sqrt(1 / np.prod(conv.weight.shape)))
             network.append(conv)
             network.append(nn.SELU(inplace=True))
+            n_input_features = self.n_kernels
         
         self.network = torch.nn.Sequential(*network)
     
@@ -118,6 +119,7 @@ class SequenceEmbeddingLSTM(nn.Module):
         for i in range(self.n_layers):
             lstm = nn.LSTM(input_size=n_input_features, hidden_size=self.n_lstm_blocks, **lstm_kwargs)
             network.append(lstm)
+            n_input_features = self.n_lstm_blocks
         
         self.network = torch.nn.Sequential(*network)
     
