@@ -20,9 +20,9 @@ def get_version(rel_path):
 
 
 readme = open("README.md").read()
-requirements = {"install": ["torch>=1.3.1", "numpy>=1.18.2", "h5py>=2.9.0", "dill>=0.3.0", "pandas>=0.24.2",
-                            "tqdm>=0.24.2", "tensorboard==1.15.0", "scikit-learn>=0.22.2.post1",
-                            "requests>=2.21.0"]}
+requirements = {"install": ["torch==1.3.1", "numpy==1.19.2", "h5py==2.9.0", "dill==0.3.0", "pandas==0.24.2",
+                            "tqdm==4.32.1", "tensorboard==1.15.0", "scikit-learn==0.23.1",
+                            "requests==2.21.0"]}
 install_requires = requirements["install"]
 
 setup(
