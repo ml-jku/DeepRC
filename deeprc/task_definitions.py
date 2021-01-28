@@ -227,10 +227,11 @@ class BinaryTarget(Target):
         """
         predictions = self.activation_function(raw_outputs=raw_outputs).detach()
         predictions_thresholded = (predictions > 0.5).float().cpu().numpy()
+        predictions = predictions.float().cpu().numpy()
         labels = targets.detach().cpu().numpy()
         labels = labels[..., 0]
         predictions_thresholded = predictions_thresholded[..., 0]
-        roc_auc = metrics.roc_auc_score(y_true=labels, y_score=predictions_thresholded, average=None)
+        roc_auc = metrics.roc_auc_score(y_true=labels, y_score=predictions, average=None)
         bacc = metrics.balanced_accuracy_score(y_true=labels, y_pred=predictions_thresholded)
         f1 = metrics.f1_score(y_true=labels, y_pred=predictions_thresholded, average='binary',
                               pos_label=1)
