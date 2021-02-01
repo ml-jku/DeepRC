@@ -28,7 +28,7 @@ Günter Klambauer<sup>1</sup>
 - examples that you can quickly adapt to your problem settings.
 
 **Will be added:**
-- multiple attention heads/queries and integration of https://github.com/ml-jku/hopfield-layers,
+- multiple attention heads/queries,
 - Integrated Gradients analysis (write me an email (widrich at ml.jku.at) if you urgently need a preliminary version).
 
 ## Installation
@@ -146,7 +146,7 @@ deeprc
 ```
 
 ## Note
-We are currently cleaning up and uploading the code for the paper.
+I'm currently cleaning up and uploading the code for the paper.
 There might be (and probably are) some bugs which will be fixed soon.
 If you need help with running DeepRC in the meantime,
 feel free to write me an email (widrich at ml.jku.at).
