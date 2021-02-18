@@ -260,6 +260,11 @@ def no_stack_collate_fn(batch_as_list: list):
     return list_batch
 
 
+def str_or_byte_to_str(str_or_byte: Union[str, bytes], decoding: str = 'utf8') -> str:
+    """Convenience function to increase compatibility with different h5py versions"""
+    return str_or_byte.decode(decoding) if isinstance(str_or_byte, bytes) else str_or_byte
+
+
 class RepertoireDataset(Dataset):
     def __init__(self, metadata_filepath: str, hdf5_filepath: str, inputformat: str = 'NCL',
                  sample_id_column: str = 'ID', metadata_file_column_sep: str = '\t',
@@ -327,10 +332,10 @@ class RepertoireDataset(Dataset):
         with h5py.File(self.filepath, 'r') as hf:
             metadata = hf['metadata']
             # Add characters for 3 position features to list of AAs
-            self.aas = metadata['aas'][()]
+            self.aas = str_or_byte_to_str(metadata['aas'][()])
             self.aas += ''.join(['<', '>', '^'])
             self.n_features = len(self.aas)
-            self.stats = metadata['stats'][()]
+            self.stats = str_or_byte_to_str(metadata['stats'][()])
             self.n_samples = metadata['n_samples'][()]
             hdf5_sample_keys = [os.path.splitext(k)[0] for k in metadata['sample_keys'][:]]
             
