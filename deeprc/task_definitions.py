@@ -419,6 +419,33 @@ class RegressionTarget(Target):
             Loss for this task as torch.Tensor of shape `(n_samples, 1)`.
         """
         return self.mse_loss(raw_outputs, targets)
+    
+    def get_scores(self, raw_outputs: torch.Tensor, targets: torch.Tensor) -> dict:
+        """Get scores for this task as dictionary
+
+        Parameters
+        ----------
+        raw_outputs: torch.Tensor
+             Raw output of the DeepRC network for this task as torch.Tensor of shape
+            `(n_samples, self.n_output_features)`
+        targets: torch.Tensor
+             Targets for this task, as returned by .get_targets() as torch.Tensor of shape
+             `(n_samples, self.n_output_features)`
+
+        Returns
+        ---------
+        scores: dict
+            Dictionary of format `{score_id: score_value}`, e.g. `{"loss": 0.01}`.
+        """
+        predictions = self.activation_function(raw_outputs=raw_outputs).detach().float().cpu().numpy()
+        y_true = targets.detach().cpu().numpy()
+        r_square = metrics.r2_score(y_true, predictions)
+        predictions_absolute = predictions * self.normalization_std + self.normalization_mean
+        y_true_absolute = y_true  * self.normalization_std + self.normalization_mean
+        MAE = metrics.mean_absolute_error(y_true_absolute, predictions_absolute)
+        MSE = metrics.mean_squared_error(y_true_absolute, predictions_absolute)
+        loss = self.loss_function(raw_outputs=raw_outputs, targets=targets).detach().mean().cpu().item()
+        return dict(r_square = r_square, MAE = MAE, MSE = MSE, loss=loss)
 
 
 class TaskDefinition(torch.nn.Module):
