@@ -385,7 +385,7 @@ class RegressionTarget(Target):
                 - self.normalization_mean) / self.normalization_std
     
     def activation_function(self, raw_outputs: torch.Tensor) -> torch.Tensor:
-        """Linear activation function to apply to network outputs to create prediction
+        """Linear activation function to apply to network outputs to create prediction (does not affect loss function!)
         
         Parameters
         ----------
@@ -402,7 +402,7 @@ class RegressionTarget(Target):
         return raw_outputs
     
     def loss_function(self, raw_outputs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
-        """`torch.nn.MSELoss()` loss used for training on this task
+        """`torch.nn.MSELoss()` loss used for training on this task (using raw outputs before activation function!)
         
         Parameters
         ----------
@@ -419,6 +419,39 @@ class RegressionTarget(Target):
             Loss for this task as torch.Tensor of shape `(n_samples, 1)`.
         """
         return self.mse_loss(raw_outputs, targets)
+
+    def get_scores(self, raw_outputs: torch.Tensor, targets: torch.Tensor) -> dict:
+        """Get scores for this task as dictionary containing R^2, mean absolute error, mean squared error, and loss
+        
+        R^2 ("r2"), mean absolute error ("mae"), and mean squared error ("mse") are computed using
+        sklearn.metrics r2_score, mean_absolute_error, and mean_squared_error, respectively.
+        
+        Parameters
+        ----------
+        raw_outputs: torch.Tensor
+             Raw output of the DeepRC network for this task as torch.Tensor of shape
+            `(n_samples, 1)`.
+        targets: torch.Tensor
+             Targets for this task, as returned by .get_targets() as torch.Tensor of shape
+             `(n_samples, 1)`.
+        
+        Returns
+        ---------
+        scores: dict
+            Dictionary of format `{score_id: score_value}`, e.g. `{"r2": 0.6, "mae": 0.5, "mse": 0.2, "loss": 0.01}`.
+        """
+        # Get denormalized predictions and targets as torch.float values
+        predictions = self.activation_function(raw_outputs=raw_outputs).float().cpu().numpy()
+        predictions_denorm = predictions * self.normalization_std + self.normalization_mean
+        targets = targets.float().cpu().numpy()
+        targets_denorm = targets * self.normalization_std + self.normalization_mean
+        
+        # Compute scores
+        r2 = metrics.r2_score(targets_denorm, predictions_denorm)
+        mae = metrics.mean_absolute_error(targets_denorm, predictions_denorm)
+        mse = metrics.mean_squared_error(targets_denorm, predictions_denorm)
+        loss = self.loss_function(raw_outputs=raw_outputs, targets=targets).detach().mean().cpu().item()
+        return dict(r2=r2, mae=mae, mse=mse, loss=loss)
 
 
 class TaskDefinition(torch.nn.Module):
