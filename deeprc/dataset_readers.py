@@ -337,7 +337,7 @@ class RepertoireDataset(Dataset):
             self.n_features = len(self.aas)
             self.stats = str_or_byte_to_str(metadata['stats'][()])
             self.n_samples = metadata['n_samples'][()]
-            hdf5_sample_keys = [os.path.splitext(k)[0] for k in metadata['sample_keys'][:]]
+            hdf5_sample_keys = [str_or_byte_to_str(os.path.splitext(k)[0]) for k in metadata['sample_keys'][:]]
             
             # Mapping metadata sample indices -> hdf5 file sample indices
             unfound_samples = np.array([sk not in hdf5_sample_keys for sk in self.sample_keys], dtype=np.bool)
