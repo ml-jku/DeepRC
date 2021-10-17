@@ -156,6 +156,8 @@ Best wishes,
 Michael
 
 ## Requirements
+I relaxed the package versions to untested versions now.
+Please see the list below for the tested package versions and let me know if some higher package version fails.
 - [Python3.6.9](https://www.python.org/) or higher
 - Python packages:
    - [Pytorch](https://pytorch.org/) (tested with version 1.3.1)
