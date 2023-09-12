@@ -324,7 +324,7 @@ class RepertoireDataset(Dataset):
         # Read target data from csv file
         self.metadata = pd.read_csv(self.metadata_filepath, sep=self.metadata_file_column_sep, header=0, dtype=str)
         self.metadata.index = self.metadata[self.sample_id_column].values
-        self.sample_keys = np.array([os.path.splitext(k)[-1] for k in self.metadata[self.sample_id_column].values])
+        self.sample_keys = np.array([os.path.splitext(k)[0] for k in self.metadata[self.sample_id_column].values])
         self.n_samples = len(self.sample_keys)
         self.target_features = self.task_definition.get_targets(self.metadata)
         
@@ -337,7 +337,7 @@ class RepertoireDataset(Dataset):
             self.n_features = len(self.aas)
             self.stats = str_or_byte_to_str(metadata['stats'][()])
             self.n_samples = metadata['n_samples'][()]
-            hdf5_sample_keys = [str_or_byte_to_str(os.path.splitext(k)[-1]) for k in metadata['sample_keys'][:]]
+            hdf5_sample_keys = [str_or_byte_to_str(os.path.splitext(k)[0]) for k in metadata['sample_keys'][:]]
             
             # Mapping metadata sample indices -> hdf5 file sample indices
             unfound_samples = np.array([sk not in hdf5_sample_keys for sk in self.sample_keys], dtype=np.bool)
